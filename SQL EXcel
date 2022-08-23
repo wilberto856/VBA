@@ -1,0 +1,46 @@
+Function Do_Guide(file As String)
+    Dim conn As ADODB.Connection
+    Dim rs As ADODB.Recordset
+    Dim totalFacturas As Long
+'    file = "C:\Samsung\W32 Summary for DF.XLSX"
+
+    Set conn = New ADODB.Connection
+    conn.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & ThisWorkbook.FullName & "; Extended Properties='Excel 12.0 xml; HDR=yes';"
+    conn.CursorLocation = adUseClient
+    conn.Open
+    
+    Set rs = New ADODB.Recordset
+    rs.activeConnection = conn
+    Query = "SELECT * FROM [Sites$] sites right JOIN (SELECT * FROM [Sheet1$] IN '" & file & "' 'Excel 12.0 xml; HDR=yes') dt ON sites.[GSCM/SAP]=dt.[Site] "
+    rs.source = Query
+    rs.Open
+    totalFacturas = rs.RecordCount
+
+    If rs.RecordCount > 0 Then
+'    ThisWorkbook.Sheets("Do Guide").Range("A2").CopyFromRecordset rs
+        While Not rs.EOF
+            With ThisWorkbook.Sheets("Do Guide")
+                lastRow = .Range("B1048576").End(xlUp).Offset(1, 0).Row
+                .Range("A" & lastRow).Value = rs.Fields(1).Value & " " & rs.Fields(3).Value
+                .Range("B" & lastRow).Value = rs.Fields(2).Value
+                .Range("C" & lastRow).Value = rs.Fields(3).Value
+                .Range("D" & lastRow).Value = rs.Fields(4).Value
+                .Range("E" & lastRow).Value = rs.Fields(5).Value
+                .Range("F" & lastRow).Value = rs.Fields(6).Value
+                .Range("G" & lastRow).Value = rs.Fields(7).Value
+                .Range("H" & lastRow).Value = rs.Fields(8).Value
+                .Range("I" & lastRow).Value = rs.Fields(9).Value
+                .Range("J" & lastRow).Value = rs.Fields(10).Value
+                .Range("K" & lastRow).Value = rs.Fields(11).Value
+                .Range("L" & lastRow).Value = rs.Fields(12).Value
+                .Range("M" & lastRow).Value = rs.Fields(13).Value
+                .Range("N" & lastRow).Value = rs.Fields(14).Value
+                .Range("O" & lastRow).Value = rs.Fields(1).Value
+            End With
+            rs.MoveNext
+        Wend
+        Set rs = Nothing
+        MsgBox "GSCM Data Pulled!", vbInformation, "Optimization Team"
+    End If
+    conn.Close
+End Function
