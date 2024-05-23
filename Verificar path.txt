@@ -1,0 +1,8 @@
+'verificar el path
+If InStr(ThisWorkbook.path, "https:") > 0 Then
+    PathT = Mid(ThisWorkbook.path, InStr(15, ThisWorkbook.path, "Desktop"), Len(ThisWorkbook.path))
+    PathT = Replace(PathT, "/", "\")
+    PathT = "C:\Users\" & Environ("Username") & "\OneDrive - Walmart Inc\" & PathT & "\SAP"
+Else
+    PathT = ThisWorkbook.path & "\SAP"
+End If
