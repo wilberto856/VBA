@@ -1,0 +1,23 @@
+Function WorksheetExists(wsName As String, Optional wb As Workbook) As Boolean
+    Dim ws As Worksheet
+    Dim workbookToCheck As Workbook
+    
+    ' If no workbook is provided, assume the active workbook
+    If wb Is Nothing Then
+        Set workbookToCheck = ThisWorkbook
+    Else
+        Set workbookToCheck = wb
+    End If
+    
+    ' Loop through all worksheets in the workbook
+    For Each ws In workbookToCheck.Worksheets
+        If ws.Name = wsName Then
+            WorksheetExists = True
+            Exit Function
+        End If
+    Next ws
+    
+    ' If the loop completes without finding a match, worksheet does not exist
+    WorksheetExists = False
+End Function
+
